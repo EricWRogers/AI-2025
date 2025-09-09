@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor;
+using TMPro;
 
 [CustomEditor(typeof(DirtManager))]
 public class DirtManagerEditor : Editor
@@ -22,11 +23,22 @@ public class DirtManager : MonoBehaviour
 {
     public GameObject dirtPrefab;
     public GameObject floor;
+    public TMP_Text collectedText;
+    public TMP_Text timeLeftText;
     public int spawnCount = 100;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+    public float timeLeft = 90f;
 
+    void Update()
+    {
+        if ((spawnCount - transform.childCount) == 0)
+            collectedText.text = "Dirt Collected: 100%";
+        else
+            collectedText.text = "Dirt Collected: " + (int)(((spawnCount - transform.childCount + 0.0f) / spawnCount) * 100) + "%";
+
+        timeLeftText.text = "Time Left: " + timeLeft.ToString("0.00") + "s";
+        timeLeft -= Time.deltaTime;
+        if (timeLeft < 0.0f)
+            timeLeft = 0.0f;
     }
 
     public void Spawn()
