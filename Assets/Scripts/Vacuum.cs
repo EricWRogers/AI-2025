@@ -12,7 +12,7 @@ public class Vacuum : MonoBehaviour
     {
         if (dirtManager.timeLeft <= 0.0f)
             return;
-            
+
         Vector3 direction = Vector3.zero;
 
         direction.x = Input.GetAxis("Horizontal");
@@ -23,8 +23,7 @@ public class Vacuum : MonoBehaviour
         transform.position += direction * speed * Time.fixedDeltaTime;
 
         List<GameObject> dirtCollected = dirtManager.FindDirtInCircle(transform.position, transform.localScale.x / 2.0f);
-        foreach (GameObject dirt in dirtCollected)
-            Destroy(dirt);
+        dirtManager.RemoveDirt(dirtCollected);
     }
 
     public void Bump()

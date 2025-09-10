@@ -9226,7 +9226,7 @@ GameObject:
   - component: {fileID: 241230313}
   - component: {fileID: 241230312}
   m_Layer: 5
-  m_Name: TimeLeft Text (1)
+  m_Name: Time Left Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29197,7 +29197,7 @@ Transform:
   m_GameObject: {fileID: 647552167}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.242, y: 0.174, z: 0}
+  m_LocalPosition: {x: 0.242, y: 0.174, z: -0.3}
   m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44556,7 +44556,7 @@ Transform:
   m_GameObject: {fileID: 1028752341}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.242, y: -0.111, z: 0}
+  m_LocalPosition: {x: 0.242, y: -0.111, z: -0.3}
   m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -47259,7 +47259,9 @@ MonoBehaviour:
   dirtPrefab: {fileID: 2858710259385058411, guid: 4a007b8dffca4f347a96900f939a5788, type: 3}
   floor: {fileID: 1484583121}
   collectedText: {fileID: 357615922}
+  timeLeftText: {fileID: 241230312}
   spawnCount: 1000
+  timeLeft: 90
 --- !u!4 &1094965424
 Transform:
   m_ObjectHideFlags: 0
@@ -84168,11 +84170,13 @@ GameObject:
   m_Component:
   - component: {fileID: 2023291877}
   - component: {fileID: 2023291876}
-  - component: {fileID: 2023291878}
-  - component: {fileID: 2023291879}
+  - component: {fileID: 2023291881}
   - component: {fileID: 2023291880}
-  m_Layer: 0
-  m_Name: Robo
+  - component: {fileID: 2023291882}
+  - component: {fileID: 2023291883}
+  - component: {fileID: 2023291884}
+  m_Layer: 2
+  m_Name: Vacuum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -84251,32 +84255,6 @@ Transform:
   - {fileID: 596083589}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2023291878
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2023291875}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71d33017e1d0cbc43a647c2d9058108a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2023291879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2023291875}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee73d32335c0ba747b62734ca56c10ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dirtManager: {fileID: 1094965423}
-  speed: 10
 --- !u!114 &2023291880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84294,44 +84272,8 @@ MonoBehaviour:
   hit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2023291879}
-        m_TargetAssemblyTypeName: Vacuum, Assembly-CSharp
-        m_MethodName: Bump
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2023291879}
-        m_TargetAssemblyTypeName: Vacuum, Assembly-CSharp
-        m_MethodName: Bump
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2023291879}
-        m_TargetAssemblyTypeName: Vacuum, Assembly-CSharp
-        m_MethodName: Bump
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2023291879}
-        m_TargetAssemblyTypeName: Vacuum, Assembly-CSharp
+      - m_Target: {fileID: 2023291881}
+        m_TargetAssemblyTypeName: VacuumCPU, Assembly-CSharp
         m_MethodName: Bump
         m_Mode: 1
         m_Arguments:
@@ -84345,6 +84287,104 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 0
+--- !u!114 &2023291881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2023291875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d21d6f5f6ab483840b276b5cc019f504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dirtManager: {fileID: 1094965423}
+--- !u!114 &2023291882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2023291875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e4ca6e7dfa1993beb1dddcb72403a8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 2
+  turningSpeed: 30
+  distanceTraveled: 0
+  turning: 0
+  onBumpReverseDistance: 0.2
+  finishedTurning:
+    m_PersistentCalls:
+      m_Calls: []
+  targetRotation: 0
+  wattsPerSeconds: 1
+--- !u!50 &2023291883
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2023291875}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0
+--- !u!58 &2023291884
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2023291875}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.5
 --- !u!1 &2024702898
 GameObject:
   m_ObjectHideFlags: 0

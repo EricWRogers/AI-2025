@@ -98,4 +98,10 @@ public class DirtManager : MonoBehaviour
 
         return results;
     }
+
+    public void RemoveDirt(List<GameObject> _dirtCollection)
+    {
+        foreach (GameObject dirt in _dirtCollection)
+            Destroy(dirt);
+    }
 }
