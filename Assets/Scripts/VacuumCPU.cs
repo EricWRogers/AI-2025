@@ -24,6 +24,7 @@ public class VacuumCPU : MonoBehaviour
             return;
 
         // You can change code starting here
+        motorController.Forward();
         
 
         // You can not change code below here
@@ -38,5 +39,6 @@ public class VacuumCPU : MonoBehaviour
         // called when the bumper is pressed
         // You can change code starting here
         // You can not change code below here
+        motorController.Turn(Random.Range(90.0f, 270.0f));
     }
 }

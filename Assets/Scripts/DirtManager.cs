@@ -27,7 +27,17 @@ public class DirtManager : MonoBehaviour
     public TMP_Text timeLeftText;
     public int spawnCount = 100;
     public float timeLeft = 90f;
+    public QuadTree quadTree;
 
+    void Awake()
+    {
+        quadTree = new QuadTree(transform.position, 10.0f, 10.0f);
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            quadTree.Add(transform.GetChild(i).gameObject);
+        }
+    }
     void Update()
     {
         if ((spawnCount - transform.childCount) == 0)
@@ -86,15 +96,7 @@ public class DirtManager : MonoBehaviour
     {
         List<GameObject> results = new List<GameObject>();
 
-        for (int i = 0; i < gameObject.transform.childCount; i++)
-        {
-            if (Vector3.Distance(_pos, transform.GetChild(i).position) < _radius)
-            {
-                results.Add(transform.GetChild(i).gameObject);
-                // example of accessing component
-                transform.GetChild(i).GetComponent<SpriteRenderer>().color = Color.red;
-            }
-        }
+        results = quadTree.Find(_pos, _radius);
 
         return results;
     }
@@ -102,6 +104,9 @@ public class DirtManager : MonoBehaviour
     public void RemoveDirt(List<GameObject> _dirtCollection)
     {
         foreach (GameObject dirt in _dirtCollection)
+        {
+            quadTree.Remove(dirt);
             Destroy(dirt);
+        }
     }
 }
