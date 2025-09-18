@@ -14,6 +14,7 @@ public class MotorController : MonoBehaviour
     private Rigidbody2D rb2d;
     private Vector3 lastPos;
     private bool goForward = false;
+    private Bumper bumper;
     public float targetRotation = 0;
     //public Battery battery;
     public float wattsPerSeconds = 1.0f;
@@ -27,6 +28,7 @@ public class MotorController : MonoBehaviour
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        bumper = GetComponent<Bumper>();
     }
 
     void FixedUpdate()
@@ -60,7 +62,7 @@ public class MotorController : MonoBehaviour
             return;
         }
 
-        if (goForward && !turning)
+        if (goForward && !turning && !bumper.hittingObject)
         {
             //if (battery)
             //{
