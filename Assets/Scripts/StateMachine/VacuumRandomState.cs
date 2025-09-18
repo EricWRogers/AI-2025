@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+// this is required for SimpleState
 using SuperPupSystems.StateMachine;
 
 [System.Serializable]
-public class VacuumRandomState : SimpleState
+public class VacuumRandomState : SimpleState // change monobehavior to SimpleState
 {
     private VacuumStateMachine m_vacuumStateMachine;
     private DirtManager m_dirtManager;
@@ -26,7 +27,7 @@ public class VacuumRandomState : SimpleState
         if (m_motorController.turning == false)
             m_motorController.Forward();
 
-        List<GameObject> dirtPile = m_dirtManager.FindDirtInCircle(stateMachine.transform.position, stateMachine.transform.localScale.x/2.0f);
+        List<GameObject> dirtPile = m_dirtManager.FindDirtInCircle(stateMachine.transform.position, stateMachine.transform.localScale.x / 2.0f);
 
         m_dirtManager.RemoveDirt(dirtPile);
     }
