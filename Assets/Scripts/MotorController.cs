@@ -11,12 +11,13 @@ public class MotorController : MonoBehaviour
     public bool turning = false;
     public float onBumpReverseDistance = 0.2f;
     public UnityEvent finishedTurning;
+    public float targetRotation = 0;
     private Rigidbody2D rb2d;
+    private Bumper bumper;
+    private Battery battery;
     private Vector3 lastPos;
     private bool goForward = false;
-    private Bumper bumper;
-    public float targetRotation = 0;
-    //public Battery battery;
+    
     public float wattsPerSeconds = 1.0f;
     
     void Awake()
@@ -29,22 +30,23 @@ public class MotorController : MonoBehaviour
     {
         rb2d = GetComponent<Rigidbody2D>();
         bumper = GetComponent<Bumper>();
+        battery = GetComponent<Battery>();
     }
 
     void FixedUpdate()
     {
-        //if (battery)
-        //{
-        //    if (battery.powerLevel == 0.0f)
-        //        return;
-        //}
+        if (battery)
+        {
+            if (battery.powerLevel == 0.0f)
+                return;
+        }
         
         if (turning)
         {
-            //if (battery)
-            //{
-            //    battery.UseBattery(wattsPerSeconds*Time.fixedDeltaTime);
-            //}
+            if (battery)
+            {
+                battery.UseBattery(wattsPerSeconds*Time.fixedDeltaTime);
+            }
             Quaternion targetRotationQuaternion = Quaternion.Euler(0, 0, targetRotation);
             transform.rotation = Quaternion.RotateTowards(
                 transform.rotation,
@@ -64,10 +66,10 @@ public class MotorController : MonoBehaviour
 
         if (goForward && !turning && !bumper.hittingObject)
         {
-            //if (battery)
-            //{
-            //    battery.UseBattery(wattsPerSeconds*Time.fixedDeltaTime);
-            //}
+            if (battery)
+            {
+                battery.UseBattery(wattsPerSeconds*Time.fixedDeltaTime);
+            }
 
             if (lastPos != transform.position)
                 distanceTraveled += Vector3.Distance(lastPos, transform.position);
