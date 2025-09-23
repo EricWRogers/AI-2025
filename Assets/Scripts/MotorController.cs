@@ -9,6 +9,7 @@ public class MotorController : MonoBehaviour
     public float turningSpeed = 5.0f;
     public float distanceTraveled;
     public bool turning = false;
+    public bool moving = false;
     public float onBumpReverseDistance = 0.2f;
     public UnityEvent finishedTurning;
     public float targetRotation = 0;
@@ -35,6 +36,9 @@ public class MotorController : MonoBehaviour
 
     void FixedUpdate()
     {
+        moving = false;
+        rb2d.angularVelocity = 0.0f;
+
         if (battery)
         {
             if (battery.powerLevel == 0.0f)
@@ -47,6 +51,7 @@ public class MotorController : MonoBehaviour
             {
                 battery.UseBattery(wattsPerSeconds*Time.fixedDeltaTime);
             }
+
             Quaternion targetRotationQuaternion = Quaternion.Euler(0, 0, targetRotation);
             transform.rotation = Quaternion.RotateTowards(
                 transform.rotation,
@@ -64,21 +69,26 @@ public class MotorController : MonoBehaviour
             return;
         }
 
-        if (goForward && !turning && !bumper.hittingObject)
+        if (goForward && !turning)
         {
-            if (battery)
-            {
-                battery.UseBattery(wattsPerSeconds*Time.fixedDeltaTime);
-            }
-
-            if (lastPos != transform.position)
-                distanceTraveled += Vector3.Distance(lastPos, transform.position);
-
-            lastPos = transform.position;
-
-            rb2d.MovePosition(transform.position + (transform.right * speed * Time.fixedDeltaTime));
-            goForward = false;
+            moving = true;
         }
+
+        if (goForward && !turning && !bumper.hittingObject)
+            {
+                if (battery)
+                {
+                    battery.UseBattery(wattsPerSeconds * Time.fixedDeltaTime);
+                }
+
+                if (lastPos != transform.position)
+                    distanceTraveled += Vector3.Distance(lastPos, transform.position);
+
+                lastPos = transform.position;
+
+                rb2d.MovePosition(transform.position + (transform.right * speed * Time.fixedDeltaTime));
+                goForward = false;
+            }
     }
 
     public void Forward()

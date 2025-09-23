@@ -6,7 +6,14 @@ public class Bumper : MonoBehaviour
     public Transform bumperTransform;
     public bool hittingObject = false;
     public UnityEvent hit;
+    public UnityEvent autoReverse;
     public LayerMask mask;
+    private MotorController m_motor;
+
+    void Start()
+    {
+        m_motor = GetComponent<MotorController>();
+    }
 
     void FixedUpdate()
     {
@@ -16,9 +23,14 @@ public class Bumper : MonoBehaviour
             transform.right,
             0.0f);
 
-        if (hits.Length > 0 && hittingObject == false)
+        if (hits.Length > 0 && (hittingObject == false))
         {
-            hit.Invoke();
+            autoReverse.Invoke();
+
+            if (m_motor.moving)
+            {
+                hit.Invoke();
+            }
         }
 
         hittingObject = (hits.Length > 0);

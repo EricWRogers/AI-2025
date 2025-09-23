@@ -28,7 +28,7 @@ public class DirtManager : MonoBehaviour
     public int spawnCount = 100;
     public float timeLeft = 90f;
     public QuadTree quadTree;
-
+    public List<BoxCollider2D> obstacles;
     void Awake()
     {
         quadTree = new QuadTree(transform.position, 10.0f, 10.0f);
@@ -86,6 +86,13 @@ public class DirtManager : MonoBehaviour
                 0.0f
             );
 
+
+            if (ObstacleOverlap(point))
+            {
+                i--;
+                continue;
+            }
+
             GameObject dirt = Instantiate(dirtPrefab);
             dirt.transform.parent = transform;
             dirt.transform.position = point;
@@ -108,5 +115,17 @@ public class DirtManager : MonoBehaviour
             quadTree.Remove(dirt);
             Destroy(dirt);
         }
+    }
+
+    private bool ObstacleOverlap(Vector3 _point)
+    {
+        foreach (BoxCollider2D collider in obstacles)
+        {
+            if (collider.OverlapPoint(_point))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
