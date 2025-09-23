@@ -33,6 +33,8 @@ public class VacuumRandomState : SimpleState // change monobehavior to SimpleSta
     public float sn45to0 = 0.0f;
     public float s0to45 = 0.0f;
 
+    public int turnCount = 0;
+
     public override void OnStart()
     {
         m_vacuumStateMachine = (VacuumStateMachine)stateMachine;
@@ -51,7 +53,7 @@ public class VacuumRandomState : SimpleState // change monobehavior to SimpleSta
         m_bumper.hit.AddListener(Bump);
 
         if (m_motorController.distanceTraveled < 1.0f)
-            m_motorController.Turn(90.0f);
+            m_motorController.Turn(60.0f);
     }
 
     public override void UpdateState(float _dt)
@@ -66,7 +68,7 @@ public class VacuumRandomState : SimpleState // change monobehavior to SimpleSta
 
         if (m_sensor0.distance <= 0.25f)
         {
-            m_motorController.Turn(CalculateTurn());
+            Bump();
         }
         
         Vector2 endOfN45 = m_sensorN45.transform.position + (m_sensorN45.transform.right * m_sensor0.distance);
@@ -107,8 +109,11 @@ public class VacuumRandomState : SimpleState // change monobehavior to SimpleSta
 
     public void Bump()
     {
+        if (turnCount == 0)
+            m_motorController.Turn(120.0f);
+        else
+            m_motorController.Turn(CalculateTurn());
         
-
-        m_motorController.Turn(CalculateTurn());
+        turnCount++;
     }
 }
