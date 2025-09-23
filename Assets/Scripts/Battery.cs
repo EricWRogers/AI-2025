@@ -30,8 +30,8 @@ public class Battery : MonoBehaviour
     public UnityEvent enteredLowPowerMode;
     public UnityEvent fullyCharged;
 
-    private float watts = 100.0f;
-    private float maxWatts = 100.0f;
+    private float watts = 50.0f;
+    private float maxWatts = 50.0f;
 
     public bool UseBattery(float _cost)
     {

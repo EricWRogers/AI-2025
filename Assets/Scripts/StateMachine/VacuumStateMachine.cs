@@ -8,12 +8,14 @@ public class VacuumStateMachine : SimpleStateMachine
     public DirtManager dirtManager;
 
     public VacuumRandomState vacuumRandomState;
+    public VacuumChargeState vacuumChargeState;
     //public SomeState someState;
 
     void Awake()
     {
         // add all states first
         states.Add(vacuumRandomState);
+        states.Add(vacuumChargeState);
         //states.Add(someState);
     }
 

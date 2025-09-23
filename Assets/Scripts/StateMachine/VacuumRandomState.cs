@@ -11,12 +11,14 @@ public class VacuumRandomState : SimpleState // change monobehavior to SimpleSta
     private DirtManager m_dirtManager;
     private MotorController m_motorController;
     private Bumper m_bumper;
+    private Battery m_battery;
     public override void OnStart()
     {
         m_vacuumStateMachine = (VacuumStateMachine)stateMachine;
         m_dirtManager = m_vacuumStateMachine.dirtManager;
         m_motorController = stateMachine.GetComponent<MotorController>();
         m_bumper = stateMachine.GetComponent<Bumper>();
+        m_battery = stateMachine.GetComponent<Battery>();
 
         // connect unity event in code
         m_bumper.hit.AddListener(Bump);
@@ -30,6 +32,9 @@ public class VacuumRandomState : SimpleState // change monobehavior to SimpleSta
         List<GameObject> dirtPile = m_dirtManager.FindDirtInCircle(stateMachine.transform.position, stateMachine.transform.localScale.x / 2.0f);
 
         m_dirtManager.RemoveDirt(dirtPile);
+
+        if (m_battery.lowPower && m_battery.charging)
+            stateMachine.ChangeState("VacuumChargeState");
     }
 
     public override void OnExit()
