@@ -85947,6 +85947,9 @@ MonoBehaviour:
   hittingObject: 0
   hit:
     m_PersistentCalls:
+      m_Calls: []
+  autoReverse:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2023291882}
         m_TargetAssemblyTypeName: MotorController, Assembly-CSharp
@@ -85960,9 +85963,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  autoReverse:
-    m_PersistentCalls:
-      m_Calls: []
   mask:
     serializedVersion: 2
     m_Bits: 0

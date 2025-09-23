@@ -49,6 +49,8 @@ public class DirtManager : MonoBehaviour
         timeLeft -= Time.deltaTime;
         if (timeLeft < 0.0f)
             timeLeft = 0.0f;
+        
+        Time.timeScale = (timeLeft <= 0.0f) ? 0.0f : 1.0f; // patch 3
     }
 
     public void Spawn()
