@@ -86065,7 +86065,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerLevel: 1
-  lowPowerLevel: 0.5
+  lowPowerLevel: 0.7
   lowPower: 0
   charging: 0
   enteredLowPowerMode:
@@ -86097,6 +86097,13 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
     stateMachine: {fileID: 0}
+    weightSensorN90: 1
+    weightSensorN45: 1
+    weightSensor0: 1
+    weightSensor45: 1
+    weightSensor90: 1
+    sn45to0: 0
+    s0to45: 0
   vacuumChargeState:
     stateStart:
       m_PersistentCalls:

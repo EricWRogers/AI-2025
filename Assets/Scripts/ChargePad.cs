@@ -10,7 +10,7 @@ public class ChargePad : MonoBehaviour
     
     void Update()
     {
-        if (Vector3.Distance(transform.position, playerTransform.position) < transform.localScale.x/2.0f)
+        if (Vector3.Distance(transform.position, playerTransform.position) < transform.localScale.x)
         {
             m_wasCharging = true;
             Battery battery = playerTransform.GetComponent<Battery>();
