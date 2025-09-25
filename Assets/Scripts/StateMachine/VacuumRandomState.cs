@@ -90,11 +90,11 @@ public class VacuumRandomState : SimpleState // change monobehavior to SimpleSta
     public float CalculateTurn()
     {
         float turn = 0.0f;
-        turn += m_sensorN90.distance * -45.0f * weightSensorN90;// * m_sensor0.distance;
+        turn += m_sensorN90.distance * -45.0f * weightSensorN90 * ((1.0f - m_sensor0.distance) * weightSensor0);
         turn += m_sensorN45.distance * -45.0f * weightSensorN45;
-        turn += m_sensor0.distance * 0 * weightSensor0;
+        //turn += m_sensor0.distance * 0 * weightSensor0;
         turn += m_sensor45.distance * 45.0f * weightSensor45;
-        turn += m_sensor90.distance * 45.0f * weightSensor90;// * m_sensor0.distance;
+        turn += m_sensor90.distance * 45.0f * weightSensor90 * ((1.0f - m_sensor0.distance) * weightSensor0);
 
         turn = Mathf.Clamp(turn, -90.0f, 90.0f);
 
