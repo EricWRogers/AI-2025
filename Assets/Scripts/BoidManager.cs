@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using Unity.VisualScripting.Dependencies.Sqlite;
+using System.Linq;
 using UnityEngine;
 
 public class BoidManager : MonoBehaviour
@@ -14,14 +13,19 @@ public class BoidManager : MonoBehaviour
     public float separationWeight = 1.0f;
     public float alignmentWeight = 0.4f;
     public float cohesionWeight = 0.15f;
+    public float obsticalWeight = 20.0f;
     public float drag = 0.95f;
     public float speed = 1.0f;
     public float maxSpeed = 3.0f;
+    public GameObject environment;
+
+    private List<Transform> m_rocks = new List<Transform>();
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        m_rocks = new List<Transform>(environment.GetComponentsInChildren<Transform>());
+        //m_rocks = environment.GetComponentsInChildren<GameObject>().ToList();
     }
 
     // Update is called once per frame
@@ -36,13 +40,19 @@ public class BoidManager : MonoBehaviour
         {
             Vector2 pos = new Vector2(boid.transform.position.x, boid.transform.position.y);
 
-            Vector2 seekDirection = Seek(pos, Vector2.zero);
-            Vector2 fleeDirection = Flee(pos, targetPos);
+            Vector2 seekDirection = Seek(pos, targetPos);
+            Vector2 fleeDirection = Flee(pos, Vector2.zero);
             Vector2 separationDirection = Separation(boid, pos);
+            Vector2 alignmentDirection = Alignment(boid, pos);
+            Vector2 cohesionDirection = Cohesion(boid, pos);
+            Vector2 obsticalDirection = Obstical(pos);
 
             boid.acceleration = (seekDirection * targetWeight) +
                                 (separationDirection * separationWeight) +
-                                (fleeDirection * fleeWeight);
+                                (fleeDirection * fleeWeight) +
+                                (alignmentDirection * alignmentWeight) +
+                                (cohesionDirection * cohesionWeight) +
+                                (obsticalDirection * obsticalWeight);
 
             boid.velocity += boid.acceleration * speed * Time.deltaTime;
 
@@ -63,6 +73,29 @@ public class BoidManager : MonoBehaviour
 
             boid.transform.position = new Vector3(pos.x, pos.y, boid.transform.position.z);
         }
+    }
+
+    Vector2 Obstical(Vector2 _agentPos)
+    {
+        Vector2 separation = Vector2.zero;
+
+        foreach(Transform ob in m_rocks)
+        {
+            Vector2 obPos = ob.position;
+            float distance = Vector2.Distance(_agentPos, obPos);
+            if (distance < ob.localScale.x * 0.5f)
+            {
+                // separation += (_agentPos - neighborPos).normalized * (maxSeparationDistance - distance);
+                separation += _agentPos - obPos;// * (maxSeparationDistance - distance);
+            }
+        }
+
+        if (separation != Vector2.zero)
+        {
+            separation.Normalize();
+        }
+
+        return separation;
     }
 
     Vector2 Seek(Vector2 _agentPos, Vector2 _targetPos)
@@ -104,5 +137,64 @@ public class BoidManager : MonoBehaviour
         }
 
         return separation;
+    }
+
+    Vector2 Alignment(Boid _boid, Vector2 _agentPos)
+    {
+        Vector2 alignment = Vector2.zero;
+        int numberOfNeighbors = 0;
+
+        Boid[] boids = GetComponentsInChildren<Boid>();
+
+        foreach (Boid neighborBoid in boids)
+        {
+            if (neighborBoid != _boid)
+            {
+                Vector2 neighborPos = neighborBoid.transform.position;
+                float distance = Vector2.Distance(_agentPos, neighborPos);
+
+                if (distance < maxAlignmentDistance)
+                {
+                    numberOfNeighbors ++;
+                    alignment += neighborBoid.velocity;
+                }
+            }
+        }
+
+        if (alignment != Vector2.zero)
+            return alignment.normalized;
+
+
+        return alignment;
+    }
+
+    Vector2 Cohesion(Boid _boid, Vector2 _agentPos)
+    {
+        Vector2 cohesion = Vector2.zero;
+        int numberOfNeighbors = 0;
+
+        Boid[] boids = GetComponentsInChildren<Boid>();
+
+        foreach(Boid neighborBoid in boids)
+        {
+            Vector2 neighborPos = neighborBoid.transform.position;
+            float distance = Vector2.Distance(_agentPos, neighborPos);
+            if (distance < maxCohesionDistance)
+            {
+                numberOfNeighbors++;
+                cohesion += neighborPos;
+            }
+        }
+
+        if (numberOfNeighbors > 0)
+        {
+            Vector2 averagePos = cohesion / (float)numberOfNeighbors;
+
+            cohesion = averagePos - _agentPos; 
+
+            if (cohesion != Vector2.zero) return cohesion.normalized;
+        }
+
+        return Vector2.zero;
     }
 }
