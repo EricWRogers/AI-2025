@@ -35,6 +35,8 @@ public class BoidManager : MonoBehaviour
             if (go.transform.localScale.x > biggestRockSize)
                 biggestRockSize = go.transform.localScale.x;
         }
+
+        m_boids = GetComponentsInChildren<Boid>();
     }
 
     // Update is called once per frame
@@ -43,7 +45,7 @@ public class BoidManager : MonoBehaviour
         Vector2 mousePos = Input.mousePosition;
         Vector2 targetPos = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        m_boids = GetComponentsInChildren<Boid>();
+        
 
         foreach(Boid boid in m_boids)
         {
