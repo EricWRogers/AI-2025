@@ -17,15 +17,19 @@ public class BoidManager : MonoBehaviour
     public float drag = 0.95f;
     public float speed = 1.0f;
     public float maxSpeed = 3.0f;
-    public GameObject environment;
 
     private List<Transform> m_rocks = new List<Transform>();
     
     // Start is called before the first frame update
     void Start()
     {
-        m_rocks = new List<Transform>(environment.GetComponentsInChildren<Transform>());
-        //m_rocks = environment.GetComponentsInChildren<GameObject>().ToList();
+        GameObject[] gos = GameObject.FindGameObjectsWithTag("ROCK");
+        m_rocks.Clear();
+
+        foreach(GameObject go in gos)
+        {
+            m_rocks.Add(go.transform);
+        }
     }
 
     // Update is called once per frame
