@@ -17,19 +17,23 @@ public class BoidManager : MonoBehaviour
     public float drag = 0.95f;
     public float speed = 1.0f;
     public float maxSpeed = 3.0f;
-
-    private List<Transform> m_rocks = new List<Transform>();
+    public QuadTree rocksQuadTree;
+    public float biggestRockSize = 0.0f;
     private Boid[] m_boids = {};
     
     // Start is called before the first frame update
     void Start()
     {
         GameObject[] gos = GameObject.FindGameObjectsWithTag("ROCK");
-        m_rocks.Clear();
 
-        foreach(GameObject go in gos)
+        rocksQuadTree = new QuadTree(transform.position, 50.0f, 50.0f);
+
+        foreach (GameObject go in gos)
         {
-            m_rocks.Add(go.transform);
+            rocksQuadTree.Add(go);
+
+            if (go.transform.localScale.x > biggestRockSize)
+                biggestRockSize = go.transform.localScale.x;
         }
     }
 
@@ -84,7 +88,9 @@ public class BoidManager : MonoBehaviour
     {
         Vector2 separation = Vector2.zero;
 
-        foreach(Transform ob in m_rocks)
+        List<Transform> result = rocksQuadTree.FindComponent<Transform>(_agentPos, 5.0f);
+
+        foreach(Transform ob in result)
         {
             Vector2 obPos = ob.position;
             float distance = Vector2.Distance(_agentPos, obPos);
