@@ -51,16 +51,12 @@ public class BoidManager : MonoBehaviour
 
             Vector2 seekDirection = Seek(pos, targetPos);
             Vector2 fleeDirection = Flee(pos, Vector2.zero);
-            Vector2 separationDirection = Separation(boid, pos);
-            Vector2 alignmentDirection = Alignment(boid, pos);
-            Vector2 cohesionDirection = Cohesion(boid, pos);
+            Vector2 sepalicoh = SepAliCoh(boid, pos);
             Vector2 obsticalDirection = Obstical(pos);
 
             boid.acceleration = (seekDirection * targetWeight) +
-                                (separationDirection * separationWeight) +
+                                sepalicoh +
                                 (fleeDirection * fleeWeight) +
-                                (alignmentDirection * alignmentWeight) +
-                                (cohesionDirection * cohesionWeight) +
                                 (obsticalDirection * obsticalWeight);
 
             boid.velocity += boid.acceleration * speed * Time.deltaTime;
@@ -180,7 +176,7 @@ public class BoidManager : MonoBehaviour
         Vector2 cohesion = Vector2.zero;
         int numberOfNeighbors = 0;
 
-        foreach(Boid neighborBoid in m_boids)
+        foreach (Boid neighborBoid in m_boids)
         {
             Vector2 neighborPos = neighborBoid.transform.position;
             float distance = Vector2.Distance(_agentPos, neighborPos);
@@ -195,11 +191,62 @@ public class BoidManager : MonoBehaviour
         {
             Vector2 averagePos = cohesion / (float)numberOfNeighbors;
 
-            cohesion = averagePos - _agentPos; 
+            cohesion = averagePos - _agentPos;
 
             if (cohesion != Vector2.zero) return cohesion.normalized;
         }
 
         return Vector2.zero;
+    }
+    
+    Vector2 SepAliCoh(Boid _boid, Vector2 _agentPos)
+    {
+        Vector2 mag = Vector2.zero;
+
+        Vector2 cohesion = Vector2.zero;
+        Vector2 alignment = Vector2.zero;
+        Vector2 separation = Vector2.zero;
+        int numberOfNeighbors = 0;
+
+        foreach (Boid neighborBoid in m_boids)
+        {
+            Vector2 neighborPos = neighborBoid.transform.position;
+            float distance = Vector2.Distance(_agentPos, neighborPos);
+            if (distance < maxCohesionDistance)
+            {
+                numberOfNeighbors++;
+                cohesion += neighborPos;
+
+                if (distance < maxAlignmentDistance)
+                {
+                    alignment += neighborBoid.velocity;
+
+                    if (distance < maxSeparationDistance)
+                    {
+                        separation += (_agentPos - neighborPos).normalized * (maxSeparationDistance - distance);
+                    }
+                }
+            }
+        }
+
+        if (numberOfNeighbors > 0)
+        {
+            Vector2 averagePos = cohesion / (float)numberOfNeighbors;
+
+            cohesion = averagePos - _agentPos;
+
+            if (cohesion != Vector2.zero)
+                cohesion = cohesion.normalized;
+        }
+
+        if (alignment != Vector2.zero)
+            alignment = alignment.normalized;
+        
+        if (separation != Vector2.zero)
+            separation = separation.normalized;
+
+        mag = (cohesion * cohesionWeight) + (alignment * alignmentWeight) + (separation * separationWeight);
+
+        return mag;
     }
 }
