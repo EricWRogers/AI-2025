@@ -19,6 +19,7 @@ public class BoidManager : MonoBehaviour
     public float maxSpeed = 3.0f;
     public QuadTree rocksQuadTree;
     public float biggestRockSize = 0.0f;
+    public QuadTree boidQuadTree;
     private Boid[] m_boids = {};
     
     // Start is called before the first frame update
@@ -27,6 +28,7 @@ public class BoidManager : MonoBehaviour
         GameObject[] gos = GameObject.FindGameObjectsWithTag("ROCK");
 
         rocksQuadTree = new QuadTree(transform.position, 50.0f, 50.0f);
+        boidQuadTree = new QuadTree(transform.position, 50.0f, 50.0f);
 
         foreach (GameObject go in gos)
         {
@@ -45,7 +47,12 @@ public class BoidManager : MonoBehaviour
         Vector2 mousePos = Input.mousePosition;
         Vector2 targetPos = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        
+        boidQuadTree.Clear();
+
+        foreach (Boid b in m_boids)
+        {
+            boidQuadTree.Add(b.gameObject);
+        }
 
         foreach(Boid boid in m_boids)
         {
@@ -210,7 +217,9 @@ public class BoidManager : MonoBehaviour
         Vector2 separation = Vector2.zero;
         int numberOfNeighbors = 0;
 
-        foreach (Boid neighborBoid in m_boids)
+        List<Boid> neighorBoids = boidQuadTree.FindComponent<Boid>(_agentPos, maxCohesionDistance);
+
+        foreach (Boid neighborBoid in neighorBoids)
         {
             Vector2 neighborPos = neighborBoid.transform.position;
             float distance = Vector2.Distance(_agentPos, neighborPos);
