@@ -19,6 +19,7 @@ public class BoidManager : MonoBehaviour
     public float maxSpeed = 3.0f;
 
     private List<Transform> m_rocks = new List<Transform>();
+    private Boid[] m_boids = {};
     
     // Start is called before the first frame update
     void Start()
@@ -38,9 +39,9 @@ public class BoidManager : MonoBehaviour
         Vector2 mousePos = Input.mousePosition;
         Vector2 targetPos = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        Boid[] boids = GetComponentsInChildren<Boid>();
+        m_boids = GetComponentsInChildren<Boid>();
 
-        foreach(Boid boid in boids)
+        foreach(Boid boid in m_boids)
         {
             Vector2 pos = new Vector2(boid.transform.position.x, boid.transform.position.y);
 
@@ -119,9 +120,7 @@ public class BoidManager : MonoBehaviour
         Vector2 separation = Vector2.zero;
         int numberOfNeighbors = transform.childCount;
 
-        Boid[] boids = GetComponentsInChildren<Boid>();
-
-        foreach(Boid neighborBoid in boids)
+        foreach(Boid neighborBoid in m_boids)
         {
             if (_boid.gameObject != neighborBoid.gameObject)
             {
@@ -148,9 +147,7 @@ public class BoidManager : MonoBehaviour
         Vector2 alignment = Vector2.zero;
         int numberOfNeighbors = 0;
 
-        Boid[] boids = GetComponentsInChildren<Boid>();
-
-        foreach (Boid neighborBoid in boids)
+        foreach (Boid neighborBoid in m_boids)
         {
             if (neighborBoid != _boid)
             {
@@ -177,9 +174,7 @@ public class BoidManager : MonoBehaviour
         Vector2 cohesion = Vector2.zero;
         int numberOfNeighbors = 0;
 
-        Boid[] boids = GetComponentsInChildren<Boid>();
-
-        foreach(Boid neighborBoid in boids)
+        foreach(Boid neighborBoid in m_boids)
         {
             Vector2 neighborPos = neighborBoid.transform.position;
             float distance = Vector2.Distance(_agentPos, neighborPos);
